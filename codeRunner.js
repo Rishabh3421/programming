@@ -20,12 +20,14 @@ function codeGenerate(node) {
         case "ConditionalPrint":
             return `console.log(${node.condition} ? ${node.trueExpression} : ${node.falseExpression});`;
 
-        case "String":
-            return `${node.value}`; 
+        case "String":  
+            return `"${node.value}"`;
 
         default:
             throw new Error(`Unsupported node type: ${node.type}`);
     }
 }
+
+
 
 module.exports = { codeRunner, codeGenerate };

@@ -6,14 +6,8 @@ const { codeRunner, codeGenerate } = require('./codeRunner.js');
 const input = `
   ye a = 50;
   ye b = 10;
-
-      ye c = a + b;
-      bata c;
-  ye d = 20;
-  bata d;
-  ye greetings = 'Hello world';
-  bata greetings;
-
+  ye c = a + b;
+  bata c;
 `;
 
 function compiler(input) {

@@ -48,10 +48,10 @@ function lexer(input) {
       }
   
       // String
-      if (char === "'") {
+      if (char === '"') {
         let str = "";
         char = input[++cursor]; // skip the opening quote
-        while (char !== "'") {
+        while (char !== '"') {
           str += char;
           char = input[++cursor];
         }
