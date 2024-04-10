@@ -1,29 +1,32 @@
+
 // main.js
 const { lexer } = require('./Lexer.js');
 const { parser } = require('./Parser.js');
 const { codeRunner, codeGenerate } = require('./codeRunner.js');
 
-// const input = `
-//   ye a = 50;
-//   ye b = 30;
-//   ye c = a + b;
-//   bata c;
-// `;
-
 const input = `
-  ye message = "Hello, World!";
-  bata message;
+  ye a = 50
+  ye b = 30
+  ye c = a + b
+  bata c
 `;
 
 // const input = `
-//   ye a = 10;
-//   ye b = 20;
-//   agar a > b:
-//     ye big = "a is bigger";
-//     bata big;
-//   vrna:
-//     ye small = "a is smaller";
-//     bata small;
+//   ye message = "Hello World"
+//   bata message
+// `;
+
+// const input = `
+// ye agar = (a < b)
+// ye vrna = (a > b)
+//   ye a = 10
+//   ye b = 20
+//   agar (a < b) 
+//     ye big = a + b
+//     bata big
+//    vrna 
+//     ye small = a - b
+//     bata small
 // `;
 
 function compiler(input) {

@@ -1,79 +1,81 @@
-// lexer.js
-
 function lexer(input) {
-  const tokens = [];
-  let cursor = 0;
+    const tokens = [];
+    let cursor = 0;
 
-  while (cursor < input.length) {
-    let char = input[cursor];
+    while (cursor < input.length) {
+        let char = input[cursor];
 
-    // skipping spaces
-    if (/\s/.test(char)) {
-      cursor++;
-      continue;
+        // Skipping spaces
+        if (/\s/.test(char)) {
+            cursor++;
+            continue;
+        }
+
+        // Character
+        if (/[a-zA-Z]/.test(char)) {
+            let word = "";
+            while (/[a-zA-Z]/.test(char)) {
+                word += char;
+                char = input[++cursor];
+            }
+            const keywords = ["ye", "bata", "agar", "vrna"];
+            const type = keywords.includes(word) ? "keyword" : "identifier";
+            tokens.push({ type, value: word });
+            continue;
+        }
+
+        // Number
+        if (/[0-9]/.test(char)) {
+            let num = "";
+            while (/[0-9]/.test(char) || char === ".") {
+                num += char;
+                char = input[++cursor];
+            }
+            tokens.push({ type: "number", value: parseFloat(num) });
+            continue;
+        }
+
+        // Handle string literals
+        if (char === '"') {
+            let str = "";
+            char = input[++cursor]; // Move cursor past the opening quote
+            while (char !== '"') {
+                if (char === undefined) {
+                    throw new Error("Unterminated string literal");
+                }
+                str += char;
+                char = input[++cursor];
+            }
+            tokens.push({ type: "string", value: str });
+            cursor++; // Move cursor past the closing quote
+            continue;
+        }
+
+        // Handle special characters
+        const specialChars = ['"', ";", "(", ")", "?", ":", "+", "-", "*", "%", "/", "\\", "<", ">", "=", "{", "}", ","];
+        if (specialChars.includes(char)) {
+            tokens.push({ type: "operator", value: char });
+            cursor++;
+            continue;
+        }
+
+        // Handle conditional statements (agar/vrna)
+        if (char === "a" || char === "v") {
+            let conditional = char;
+            char = input[++cursor];
+            if ((char === "g" && input[cursor + 1] === "a") || (char === "r" && input[cursor + 1] === "n")) {
+                conditional += char + input[cursor + 1];
+                cursor += 2;
+                tokens.push({ type: "keyword", value: conditional });
+                continue;
+            }
+        }
+
+        // If none of the above matches, there's an error
+        throw new Error(`Unexpected character: ${char} at position ${cursor}`);
     }
 
-    // Character
-    if (/[a-zA-Z]/.test(char)) {
-      let word = "";
-      while (/[a-zA-Z]/.test(char)) {
-        word += char;
-        char = input[++cursor];
-      }
-      if (
-        word === "ye" ||
-        word === "bata" ||
-        word === "agar" ||
-        word === "warna"
-      ) {
-        tokens.push({ type: "keyword", value: word });
-      } else {
-        tokens.push({ type: "identifier", value: word });
-      }
-      continue;
-    }
-
-    // Number
-    if (/[0-9]/.test(char)) {
-      let num = "";
-      while (/[0-9]/.test(char)) {
-        num += char;
-        char = input[++cursor];
-      }
-      tokens.push({ type: "number", value: parseInt(num) });
-      continue;
-    }
-
-    // String
-    if (char === '"') {
-      let str = "";
-      char = input[++cursor]; // skip the opening quote
-      while (char !== '"') {
-        str += char;
-        char = input[++cursor];
-      }
-      tokens.push({ type: "string", value: str });
-      cursor++; // skip the closing quote
-      continue;
-    }
-
-    // Semicolon
-    if (char === ";") {
-      tokens.push({ type: "semicolon", value: ";" });
-      cursor++;
-      continue;
-    }
-
-    // Operator
-    if (/[\+\-\*\%\/\\\<\>\=]/.test(char)) {
-      tokens.push({ type: "operator", value: char });
-      cursor++;
-      continue;
-    }
-
-  }
-
-  return tokens;
+    return tokens;
 }
 
 module.exports = { lexer };
